@@ -24,6 +24,10 @@ public abstract class User {
         System.out.println("Contact added successfully!");
     }
     
+    public  List<Contact> getContacts() {
+    	return this.contacts;
+    }
+    
     public void viewContacts() {
 
         if (contacts.isEmpty()) {

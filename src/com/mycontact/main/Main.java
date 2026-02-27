@@ -9,6 +9,9 @@ import com.mycontact.auth.strategy.BasicAuth;
 import com.mycontact.view.View;
 
 /**
+ * Use Case 5: View Contact Details
+ * This Use Case provides an option to view details of any specific Contact details
+ * 
  * Main entry point of the My Contacts Application.
  *
  * This class:
@@ -20,7 +23,7 @@ import com.mycontact.view.View;
  * The application runs continuously until manually terminated.
  *
  * @author Developer
- * @version 4.0
+ * @version 5.0
  */
 public class Main {
 

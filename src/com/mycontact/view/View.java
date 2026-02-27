@@ -1,5 +1,6 @@
 package com.mycontact.view;
 
+import java.util.List;
 import java.util.Scanner;
 
 import com.mycontact.main.Main;
@@ -140,46 +141,90 @@ public class View {
 
         
         //  CONTACTS 
+     // CONTACTS 
         else if (choice == 2) {
 
-            System.out.println("\n--- Your Contacts ---");
-            Main.currentUser.viewContacts();
-            System.out.println("1. Add Contact");
-            System.out.println("2. Close");
-            int cChoice = sc.nextInt();
-            sc.nextLine();
+            while (true) {
 
-            if (cChoice == 1) {
-                System.out.println("Select Contact Type:");
-                System.out.println("1. Person");
-                System.out.println("2. Organisation");
-                int typeChoice = sc.nextInt();
-                sc.nextLine();
-                System.out.println("Enter contact name:");
-                String name = sc.nextLine();
+                System.out.println("\n--- Your Contacts ---");
 
-                System.out.println("Enter contact number:");
-                String number = sc.nextLine();
+                List<Contact> contacts = Main.currentUser.getContacts();
 
-                System.out.println("Enter contact email:");
-                String email = sc.nextLine();
-
-                Contact contact;
-
-                if (typeChoice == 1) {
-                    contact = new Person();
-                } else if (typeChoice == 2) {
-                    contact = new Organization();
+                if (contacts.isEmpty()) {
+                    System.out.println("No contacts found.");
                 } else {
-                    System.out.println("Invalid contact type.");
-                    return;
+                    for (int i = 0; i < contacts.size(); i++) {
+                        System.out.println((i + 1) + ". " + contacts.get(i).getName());
+                    }
                 }
 
-                contact.setName(name);
-                contact.setNumber(number);
-                contact.setEmail(email);
+                System.out.println((contacts.size() + 1) + ". Add Contact");
+                System.out.println((contacts.size() + 2) + ". Close");
 
-                Main.currentUser.addContact(contact);
+                int cChoice = sc.nextInt();
+                sc.nextLine();
+
+                // View Contact Details
+                if (cChoice >= 1 && cChoice <= contacts.size()) {
+
+                    Contact selected = contacts.get(cChoice - 1);
+
+                    System.out.println("\n--- Contact Details ---");
+                    System.out.println("Name   : " + selected.getName());
+                    System.out.println("Number : " + selected.getNumber());
+                    System.out.println("Email  : " + selected.getEmail());
+
+                    System.out.println("\nPress Enter to continue...");
+                    sc.nextLine();
+                }
+
+                // Add Contact
+                else if (cChoice == contacts.size() + 1) {
+
+                    System.out.println("Select Contact Type:");
+                    System.out.println("1. Person");
+                    System.out.println("2. Organisation");
+
+                    int typeChoice = sc.nextInt();
+                    sc.nextLine();
+
+                    System.out.println("Enter contact name:");
+                    String name = sc.nextLine();
+
+                    System.out.println("Enter contact number:");
+                    String number = sc.nextLine();
+
+                    System.out.println("Enter contact email:");
+                    String email = sc.nextLine();
+
+                    Contact contact;
+
+                    if (typeChoice == 1) {
+                        contact = new Person();
+                    } else if (typeChoice == 2) {
+                        contact = new Organization();
+                    } else {
+                        System.out.println("Invalid contact type.");
+                        continue;
+                    }
+
+                    contact.setName(name);
+                    contact.setNumber(number);
+                    contact.setEmail(email);
+
+                    Main.currentUser.addContact(contact);
+
+                    System.out.println("Contact added successfully!");
+                }
+
+                // Close
+                else if (cChoice == contacts.size() + 2) {
+                    break;
+                }
+
+                else {
+                    System.out.println("Invalid choice.");
+                }
             }
         }
 
