@@ -1,5 +1,10 @@
 # MyContactsApp
 
+## UC-08: Bulk Operations
+The Bulk Operations feature allows a logged-in user to perform actions on multiple contacts at once.  
+Users can select multiple contacts and choose to delete them, add a common tag, or export them (dummy operation).  
+This feature improves efficiency by enabling batch processing instead of handling contacts individually.
+
 ## UC-07: Delete Contact
 The Delete Contact feature allows users to permanently remove an existing contact from their contact list.  
 Users can select a contact and choose the delete option with confirmation before removal.  

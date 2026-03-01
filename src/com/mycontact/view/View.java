@@ -1,5 +1,7 @@
 package com.mycontact.view;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -158,7 +160,8 @@ public class View {
 				}
 
 				System.out.println((contacts.size() + 1) + ". Add Contact");
-				System.out.println((contacts.size() + 2) + ". Close");
+				System.out.println((contacts.size() + 2) + ". Bulk Operations");
+				System.out.println((contacts.size() + 3) + ". Close");
 
 				int cChoice = sc.nextInt();
 				sc.nextLine();
@@ -283,8 +286,78 @@ public class View {
 					System.out.println("Contact added successfully!");
 				}
 
-				// Close
+				//Bulk Operations
 				else if (cChoice == contacts.size() + 2) {
+
+				    List<Integer> selectedIndexes = new ArrayList<>();
+
+				    System.out.println("Enter contact numbers to select (0 to stop):");
+
+				    while (true) {
+				        int index = sc.nextInt();
+				        sc.nextLine();
+
+				        if (index == 0) break;
+
+				        if (index >= 1 && index <= contacts.size()) {
+				            selectedIndexes.add(index - 1);
+				            System.out.println("Added: " + contacts.get(index - 1).getName());
+				        } else {
+				            System.out.println("Invalid contact number.");
+				        }
+				    }
+
+				    if (selectedIndexes.isEmpty()) {
+				        System.out.println("No contacts selected.");
+				        continue;
+				    }
+
+				    System.out.println("\nBulk Options:");
+				    System.out.println("1. Delete");
+				    System.out.println("2. Tag");
+				    System.out.println("3. Export");
+
+				    int bulkChoice = sc.nextInt();
+				    sc.nextLine();
+
+				    // DELETE
+				    if (bulkChoice == 1) {
+
+				        // Remove from highest index to lowest to avoid shifting issue
+				        Collections.sort(selectedIndexes, Collections.reverseOrder());
+
+				        for (int i : selectedIndexes) {
+				            Main.currentUser.deleteContact(i);
+				        }
+
+				        System.out.println("Selected contacts deleted successfully!");
+				    }
+
+				    // TAG
+				    else if (bulkChoice == 2) {
+
+				        System.out.println("Enter tag name:");
+				        String tag = sc.nextLine();
+
+				        for (int i : selectedIndexes) {
+				            contacts.get(i).addTag(tag);
+				        }
+
+				        System.out.println("Tag added to selected contacts!");
+				    }
+
+				    // EXPORT (Dummy)
+				    else if (bulkChoice == 3) {
+				        System.out.println("Exported");
+				    }
+
+				    else {
+				        System.out.println("Invalid option.");
+				    }
+				}
+				
+				// Close
+				else if (cChoice == contacts.size() + 3) {
 					break;
 				}
 

@@ -1,10 +1,18 @@
 package com.mycontact.contact.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //Abstract base class representing a Contact.
 public abstract class Contact {
 	private String name;
 	private String number;
 	private String email;
+    private List<String> tags = new ArrayList<>();
+    
+    public void addTag(String tag) {
+        tags.add(tag);
+    }
 	public String getName() {
 		return name;
 	}
