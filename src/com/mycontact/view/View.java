@@ -140,7 +140,6 @@ public class View {
         }
 
         
-        //  CONTACTS 
      // CONTACTS 
         else if (choice == 2) {
 
@@ -169,13 +168,69 @@ public class View {
 
                     Contact selected = contacts.get(cChoice - 1);
 
-                    System.out.println("\n--- Contact Details ---");
-                    System.out.println("Name   : " + selected.getName());
-                    System.out.println("Number : " + selected.getNumber());
-                    System.out.println("Email  : " + selected.getEmail());
 
-                    System.out.println("\nPress Enter to continue...");
-                    sc.nextLine();
+                    while (true) {
+
+                        System.out.println("\n--- Contact Details ---");
+                        System.out.println("Name   : " + selected.getName());
+                        System.out.println("Number : " + selected.getNumber());
+                        System.out.println("Email  : " + selected.getEmail());
+
+                        System.out.println("\n1. Edit");
+                        System.out.println("2. Close");
+
+                        int detailChoice = sc.nextInt();
+                        sc.nextLine();
+
+                        // Edit Option
+                        if (detailChoice == 1) {
+
+                            while (true) {
+                                System.out.println("\n--- Edit Contact ---");
+                                System.out.println("1. Edit Name");
+                                System.out.println("2. Edit Number");
+                                System.out.println("3. Edit Email");
+                                System.out.println("4. Close");
+
+                                int editChoice = sc.nextInt();
+                                sc.nextLine();
+
+                                if (editChoice == 1) {
+                                    System.out.println("Enter new name:");
+                                    String newName = sc.nextLine();
+                                    selected.setName(newName);
+                                    System.out.println("Name updated successfully!");
+                                } 
+                                else if (editChoice == 2) {
+                                    System.out.println("Enter new number:");
+                                    String newNumber = sc.nextLine();
+                                    selected.setNumber(newNumber);
+                                    System.out.println("Number updated successfully!");
+                                } 
+                                else if (editChoice == 3) {
+                                    System.out.println("Enter new email:");
+                                    String newEmail = sc.nextLine();
+                                    selected.setEmail(newEmail);
+                                    System.out.println("Email updated successfully!");
+                                } 
+                                else if (editChoice == 4) {
+                                    break; // exit edit menu
+                                } 
+                                else {
+                                    System.out.println("Invalid choice.");
+                                }
+                            }
+                        }
+
+                        // Close Contact Details
+                        else if (detailChoice == 2) {
+                            break;
+                        }
+
+                        else {
+                            System.out.println("Invalid choice.");
+                        }
+                    }
                 }
 
                 // Add Contact
