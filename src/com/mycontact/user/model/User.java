@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mycontact.contact.model.Contact;
+import com.mycontact.tag.model.Tag;
 /**
  * Abstract class representing a system user.
  * 
@@ -18,6 +19,16 @@ public abstract class User {
     private String passwordHash;
     private String name;
     private List<Contact> contacts = new ArrayList<>();
+    
+    private List<Tag> tags = new ArrayList<>();
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void addTag(Tag tag) {
+        tags.add(tag);
+    }
     
     public void addContact(Contact contact) {
         contacts.add(contact);

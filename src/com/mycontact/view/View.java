@@ -1,5 +1,6 @@
 package com.mycontact.view;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -164,7 +165,8 @@ public class View {
 				System.out.println((contacts.size() + 1) + ". Add Contact");
 				System.out.println((contacts.size() + 2) + ". Bulk Operations");
 				System.out.println((contacts.size() + 3) + ". Search");
-				System.out.println((contacts.size() + 4) + ". Close");
+				System.out.println((contacts.size() + 4) + ". Add Filter");
+				System.out.println((contacts.size() + 5) + ". Close");
 
 				int cChoice = sc.nextInt();
 				sc.nextLine();
@@ -446,8 +448,80 @@ public class View {
 				    }
 				}
 				
+				else if (cChoice == contacts.size() + 1) {
+
+				    System.out.println("\nFilter By:");
+				    System.out.println("1. Tag");
+				    System.out.println("2. Date Added (After)");
+				    System.out.println("3. Frequently Contacted");
+
+				    int filterChoice = sc.nextInt();
+				    sc.nextLine();
+
+				    List<Contact> filtered = new ArrayList<>();
+
+				    // FILTER BY TAG
+				    if (filterChoice == 1) {
+
+				        System.out.println("Enter tag:");
+				        String tagInput = sc.nextLine();
+
+				        for (Contact c : contacts) {
+				            if (c.getTags().contains(tagInput)) {
+				                filtered.add(c);
+				            }
+				        }
+				    }
+
+				    // FILTER BY DATE
+				    else if (filterChoice == 2) {
+
+				        System.out.println("Enter date (yyyy-MM-dd):");
+				        String dateInput = sc.nextLine();
+
+				        try {
+				            LocalDate inputDate = LocalDate.parse(dateInput);
+
+				            for (Contact c : contacts) {
+				                if (c.getDateAdded().toLocalDate().isAfter(inputDate)) {
+				                    filtered.add(c);
+				                }
+				            }
+				        } catch (Exception e) {
+				            System.out.println("Invalid date format.");
+				            continue;
+				        }
+				    }
+
+				    // FILTER BY FREQUENTLY CONTACTED (Dummy)
+				    else if (filterChoice == 3) {
+
+				        for (Contact c : contacts) {
+				            if (c.isFrequentlyContacted()) {
+				                filtered.add(c);
+				            }
+				        }
+				    }
+
+				    else {
+				        System.out.println("Invalid filter option.");
+				        continue;
+				    }
+
+				    // Display Results
+				    if (filtered.isEmpty()) {
+				        System.out.println("No contacts found.");
+				    } else {
+				        System.out.println("\nFiltered Contacts:");
+				        for (Contact c : filtered) {
+				            int index = contacts.indexOf(c);
+				            System.out.println((index + 1) + ". " + c.getName());
+				        }
+				    }
+				}
+				
 				// Close
-				else if (cChoice == contacts.size() + 4) {
+				else if (cChoice == contacts.size() + 5) {
 					break;
 				}
 

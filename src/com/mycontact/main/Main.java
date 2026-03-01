@@ -9,11 +9,11 @@ import com.mycontact.auth.strategy.BasicAuth;
 import com.mycontact.view.View;
 
 /**
- * UC-09: Search Contacts
- * The Search Contacts feature allows a user to search contacts by name, phone number, email, or tags using regular expressions.  
- * After selecting a search category, the user enters a keyword (e.g., "ra"), and the system displays all matching contacts with their original index numbers.  
- * The user can then select a specific contact by entering its displayed number to view detailed information.
- *
+ * ## UC-10: Apply Filters on Contacts
+ * 
+ * The Apply Filters feature allows a user to filter contacts based on specific criteria such as tag, date added, or frequently contacted status. 
+ * The `dateAdded` field is automatically assigned when a contact is created, while the frequently contacted option is currently a dummy flag. This feature helps users quickly narrow down and manage contacts efficiently using structured filtering options.
+
  * This class:
  * - Initializes the application
  * - Maintains the in-memory user database
@@ -23,7 +23,7 @@ import com.mycontact.view.View;
  * The application runs continuously until manually terminated.
  *
  * @author Developer
- * @version 9.0
+ * @version 10.0
  */
 public class Main {
 

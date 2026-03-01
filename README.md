@@ -1,5 +1,8 @@
 # MyContactsApp
 
+## UC-10: Apply Filters on Contacts
+The Apply Filters feature allows a user to filter contacts based on specific criteria such as tag, date added, or frequently contacted status. The `dateAdded` field is automatically assigned when a contact is created, while the frequently contacted option is currently a dummy flag. This feature helps users quickly narrow down and manage contacts efficiently using structured filtering options.
+
 ## UC-09: Search Contacts
 The Search Contacts feature allows a user to search contacts by name, phone number, email, or tags using regular expressions.  
 After selecting a search category, the user enters a keyword (e.g., "ra"), and the system displays all matching contacts with their original index numbers.  
