@@ -9,10 +9,10 @@ import com.mycontact.auth.strategy.BasicAuth;
 import com.mycontact.view.View;
 
 /**
- * Use Case 5: View Contact Details
- * This Use Case provides an option to view details of any specific Contact details
- * 
- * Main entry point of the My Contacts Application.
+ * UC-07: Delete Contact
+ * The Delete Contact feature allows users to permanently remove an existing contact from their contact list.  
+ * Users can select a contact and choose the delete option with confirmation before removal.  
+ * The contact is safely removed from the user's contact collection, ensuring data consistency.
  *
  * This class:
  * - Initializes the application

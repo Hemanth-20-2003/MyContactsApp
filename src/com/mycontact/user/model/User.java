@@ -24,6 +24,14 @@ public abstract class User {
         System.out.println("Contact added successfully!");
     }
     
+    public void deleteContact(int index) {
+        if (index >= 0 && index < contacts.size()) {
+            contacts.remove(index);
+        } else {
+            System.out.println("Invalid contact index.");
+        }
+    }
+    
     public  List<Contact> getContacts() {
     	return this.contacts;
     }

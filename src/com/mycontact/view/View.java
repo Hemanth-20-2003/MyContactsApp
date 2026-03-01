@@ -23,270 +23,281 @@ import com.mycontact.contact.model.Person;
 
 public class View {
 	//View for the loggedOut users.
-    public static void loggedOutView(Scanner sc, Authentication auth) {
-        System.out.println("\n1. Register New User");
-        System.out.println("2. Login");
-        int choice = sc.nextInt();
-        sc.nextLine();
-        if (choice == 1) {
-            try {
-                System.out.println("Enter name:");
-                String name = sc.nextLine();
+	public static void loggedOutView(Scanner sc, Authentication auth) {
+		System.out.println("\n1. Register New User");
+		System.out.println("2. Login");
+		int choice = sc.nextInt();
+		sc.nextLine();
+		if (choice == 1) {
+			try {
+				System.out.println("Enter name:");
+				String name = sc.nextLine();
 
-                System.out.println("Enter email:");
-                String email = sc.nextLine();
+				System.out.println("Enter email:");
+				String email = sc.nextLine();
 
-                System.out.println("Enter password:");
-                String password = sc.nextLine();
+				System.out.println("Enter password:");
+				String password = sc.nextLine();
 
-                System.out.println("Free or Premium:");
-                String type = sc.nextLine();
+				System.out.println("Free or Premium:");
+				String type = sc.nextLine();
 
-                User user = UserService.registerUser(type, name, email, password);
-                Main.userDatabase.put(user.getEmail(), user);
+				User user = UserService.registerUser(type, name, email, password);
+				Main.userDatabase.put(user.getEmail(), user);
 
-                System.out.println("User Registered Successfully!");
+				System.out.println("User Registered Successfully!");
 
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        } else if (choice == 2) {
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		} else if (choice == 2) {
 
-            System.out.println("Enter email:");
-            String email = sc.nextLine();
+			System.out.println("Enter email:");
+			String email = sc.nextLine();
 
-            System.out.println("Enter password:");
-            String password = sc.nextLine();
+			System.out.println("Enter password:");
+			String password = sc.nextLine();
 
-            User user = auth.authenticate(email, password);
+			User user = auth.authenticate(email, password);
 
-            if (user != null) {
-                Main.currentUser = user;
-                System.out.println("Login Successful! Welcome " + user.getName());
-            } else {
-                System.out.println("Invalid Credentials.");
-            }
-        }
-    }
-    
-    //View for LoggedInUsers
-    public static void loggedInView(Scanner sc) {
+			if (user != null) {
+				Main.currentUser = user;
+				System.out.println("Login Successful! Welcome " + user.getName());
+			} else {
+				System.out.println("Invalid Credentials.");
+			}
+		}
+	}
 
-        System.out.println("\n1. Profile");
-        System.out.println("2. Contacts");
-        System.out.println("3. Logout");
+	//View for LoggedInUsers
+	public static void loggedInView(Scanner sc) {
 
-        int choice = sc.nextInt();
-        sc.nextLine();
+		System.out.println("\n1. Profile");
+		System.out.println("2. Contacts");
+		System.out.println("3. Logout");
 
-        // PROFILE 
-        if (choice == 1) {
+		int choice = sc.nextInt();
+		sc.nextLine();
 
-            System.out.println("\n--- Profile Info ---");
-            System.out.println("Name  : " + Main.currentUser.getName());
-            System.out.println("Email : " + Main.currentUser.getEmail());
+		// PROFILE 
+		if (choice == 1) {
 
-            System.out.println("\n1. Edit");
-            System.out.println("2. Close");
+			System.out.println("\n--- Profile Info ---");
+			System.out.println("Name  : " + Main.currentUser.getName());
+			System.out.println("Email : " + Main.currentUser.getEmail());
 
-            int pChoice = sc.nextInt();
-            sc.nextLine();
+			System.out.println("\n1. Edit");
+			System.out.println("2. Close");
 
-            if (pChoice == 1) {
+			int pChoice = sc.nextInt();
+			sc.nextLine();
 
-                System.out.println("\n1. Edit Name");
-                System.out.println("2. Edit Email");
-                System.out.println("3. Edit Password");
+			if (pChoice == 1) {
 
-                int editChoice = sc.nextInt();
-                sc.nextLine();
+				System.out.println("\n1. Edit Name");
+				System.out.println("2. Edit Email");
+				System.out.println("3. Edit Password");
 
-                if (editChoice == 1) {
+				int editChoice = sc.nextInt();
+				sc.nextLine();
 
-                    System.out.println("Enter new name:");
-                    String newName = sc.nextLine();
-                    Main.currentUser.setName(newName);
-                    System.out.println("Name updated successfully!");
+				if (editChoice == 1) {
 
-                } else if (editChoice == 2) {
+					System.out.println("Enter new name:");
+					String newName = sc.nextLine();
+					Main.currentUser.setName(newName);
+					System.out.println("Name updated successfully!");
 
-                    System.out.println("Enter new email:");
-                    String newEmail = sc.nextLine();
+				} else if (editChoice == 2) {
 
-                    if (!UserService.isValidEmail(newEmail)) {
-                        System.out.println("Invalid Email");
-                        return;
-                    }
+					System.out.println("Enter new email:");
+					String newEmail = sc.nextLine();
 
-                    Main.userDatabase.remove(Main.currentUser.getEmail());
-                    Main.currentUser.setEmail(newEmail);
-                    Main.userDatabase.put(newEmail, Main.currentUser);
+					if (!UserService.isValidEmail(newEmail)) {
+						System.out.println("Invalid Email");
+						return;
+					}
 
-                    System.out.println("Email updated successfully!");
+					Main.userDatabase.remove(Main.currentUser.getEmail());
+					Main.currentUser.setEmail(newEmail);
+					Main.userDatabase.put(newEmail, Main.currentUser);
 
-                } else if (editChoice == 3) {
+					System.out.println("Email updated successfully!");
 
-                    try {
-                        System.out.println("Enter new password:");
-                        String newPassword = sc.nextLine();
-                        String hashed = UserService.hashPassword(newPassword);
-                        Main.currentUser.setPasswordHash(hashed);
-                        System.out.println("Password updated successfully!");
-                    } catch (Exception e) {
-                        System.out.println("Error updating password");
-                    }
-                }
-            }
-        }
+				} else if (editChoice == 3) {
 
-        
-     // CONTACTS 
-        else if (choice == 2) {
-
-            while (true) {
-
-                System.out.println("\n--- Your Contacts ---");
-
-                List<Contact> contacts = Main.currentUser.getContacts();
-
-                if (contacts.isEmpty()) {
-                    System.out.println("No contacts found.");
-                } else {
-                    for (int i = 0; i < contacts.size(); i++) {
-                        System.out.println((i + 1) + ". " + contacts.get(i).getName());
-                    }
-                }
-
-                System.out.println((contacts.size() + 1) + ". Add Contact");
-                System.out.println((contacts.size() + 2) + ". Close");
-
-                int cChoice = sc.nextInt();
-                sc.nextLine();
-
-                // View Contact Details
-                if (cChoice >= 1 && cChoice <= contacts.size()) {
-
-                    Contact selected = contacts.get(cChoice - 1);
+					try {
+						System.out.println("Enter new password:");
+						String newPassword = sc.nextLine();
+						String hashed = UserService.hashPassword(newPassword);
+						Main.currentUser.setPasswordHash(hashed);
+						System.out.println("Password updated successfully!");
+					} catch (Exception e) {
+						System.out.println("Error updating password");
+					}
+				}
+			}
+		}
 
 
-                    while (true) {
+		// CONTACTS 
+		else if (choice == 2) {
 
-                        System.out.println("\n--- Contact Details ---");
-                        System.out.println("Name   : " + selected.getName());
-                        System.out.println("Number : " + selected.getNumber());
-                        System.out.println("Email  : " + selected.getEmail());
+			while (true) {
 
-                        System.out.println("\n1. Edit");
-                        System.out.println("2. Close");
+				System.out.println("\n--- Your Contacts ---");
 
-                        int detailChoice = sc.nextInt();
-                        sc.nextLine();
+				List<Contact> contacts = Main.currentUser.getContacts();
 
-                        // Edit Option
-                        if (detailChoice == 1) {
+				if (contacts.isEmpty()) {
+					System.out.println("No contacts found.");
+				} else {
+					for (int i = 0; i < contacts.size(); i++) {
+						System.out.println((i + 1) + ". " + contacts.get(i).getName());
+					}
+				}
 
-                            while (true) {
-                                System.out.println("\n--- Edit Contact ---");
-                                System.out.println("1. Edit Name");
-                                System.out.println("2. Edit Number");
-                                System.out.println("3. Edit Email");
-                                System.out.println("4. Close");
+				System.out.println((contacts.size() + 1) + ". Add Contact");
+				System.out.println((contacts.size() + 2) + ". Close");
 
-                                int editChoice = sc.nextInt();
-                                sc.nextLine();
+				int cChoice = sc.nextInt();
+				sc.nextLine();
 
-                                if (editChoice == 1) {
-                                    System.out.println("Enter new name:");
-                                    String newName = sc.nextLine();
-                                    selected.setName(newName);
-                                    System.out.println("Name updated successfully!");
-                                } 
-                                else if (editChoice == 2) {
-                                    System.out.println("Enter new number:");
-                                    String newNumber = sc.nextLine();
-                                    selected.setNumber(newNumber);
-                                    System.out.println("Number updated successfully!");
-                                } 
-                                else if (editChoice == 3) {
-                                    System.out.println("Enter new email:");
-                                    String newEmail = sc.nextLine();
-                                    selected.setEmail(newEmail);
-                                    System.out.println("Email updated successfully!");
-                                } 
-                                else if (editChoice == 4) {
-                                    break; // exit edit menu
-                                } 
-                                else {
-                                    System.out.println("Invalid choice.");
-                                }
-                            }
-                        }
+				// View Contact Details
+				if (cChoice >= 1 && cChoice <= contacts.size()) {
 
-                        // Close Contact Details
-                        else if (detailChoice == 2) {
-                            break;
-                        }
+					Contact selected = contacts.get(cChoice - 1);
 
-                        else {
-                            System.out.println("Invalid choice.");
-                        }
-                    }
-                }
 
-                // Add Contact
-                else if (cChoice == contacts.size() + 1) {
+					while (true) {
 
-                    System.out.println("Select Contact Type:");
-                    System.out.println("1. Person");
-                    System.out.println("2. Organisation");
+						System.out.println("\n--- Contact Details ---");
+						System.out.println("Name   : " + selected.getName());
+						System.out.println("Number : " + selected.getNumber());
+						System.out.println("Email  : " + selected.getEmail());
 
-                    int typeChoice = sc.nextInt();
-                    sc.nextLine();
+						System.out.println("\n1. Edit");
+						System.out.println("2. Delete");
+						System.out.println("3. Close");
 
-                    System.out.println("Enter contact name:");
-                    String name = sc.nextLine();
+						int detailChoice = sc.nextInt();
+						sc.nextLine();
 
-                    System.out.println("Enter contact number:");
-                    String number = sc.nextLine();
+						// EDIT
+						if (detailChoice == 1) {
 
-                    System.out.println("Enter contact email:");
-                    String email = sc.nextLine();
+							while (true) {
+								System.out.println("\n--- Edit Contact ---");
+								System.out.println("1. Edit Name");
+								System.out.println("2. Edit Number");
+								System.out.println("3. Edit Email");
+								System.out.println("4. Close");
 
-                    Contact contact;
+								int editChoice = sc.nextInt();
+								sc.nextLine();
 
-                    if (typeChoice == 1) {
-                        contact = new Person();
-                    } else if (typeChoice == 2) {
-                        contact = new Organization();
-                    } else {
-                        System.out.println("Invalid contact type.");
-                        continue;
-                    }
+								if (editChoice == 1) {
+									System.out.println("Enter new name:");
+									selected.setName(sc.nextLine());
+									System.out.println("Name updated successfully!");
+								} 
+								else if (editChoice == 2) {
+									System.out.println("Enter new number:");
+									selected.setNumber(sc.nextLine());
+									System.out.println("Number updated successfully!");
+								} 
+								else if (editChoice == 3) {
+									System.out.println("Enter new email:");
+									selected.setEmail(sc.nextLine());
+									System.out.println("Email updated successfully!");
+								} 
+								else if (editChoice == 4) {
+									break;
+								} 
+								else {
+									System.out.println("Invalid choice.");
+								}
+							}
+						}
 
-                    contact.setName(name);
-                    contact.setNumber(number);
-                    contact.setEmail(email);
+						// DELETE
+						else if (detailChoice == 2) {
 
-                    Main.currentUser.addContact(contact);
+							System.out.println("Are you sure you want to delete this contact? (y/n)");
+							String confirm = sc.nextLine();
 
-                    System.out.println("Contact added successfully!");
-                }
+							if (confirm.equalsIgnoreCase("y")) {
+								Main.currentUser.deleteContact(cChoice - 1);
+								System.out.println("Contact deleted successfully!");
+								break;  // Exit after deletion
+							}
+						}
 
-                // Close
-                else if (cChoice == contacts.size() + 2) {
-                    break;
-                }
+						// CLOSE
+						else if (detailChoice == 3) {
+							break;
+						}
 
-                else {
-                    System.out.println("Invalid choice.");
-                }
-            }
-        }
+						else {
+							System.out.println("Invalid choice.");
+						}
+					}
+				}
 
-        else if (choice == 3) {
+				// Add Contact
+				else if (cChoice == contacts.size() + 1) {
 
-            Main.currentUser = null;
-            System.out.println("Logged out successfully.");
-        }
-    }
+					System.out.println("Select Contact Type:");
+					System.out.println("1. Person");
+					System.out.println("2. Organisation");
+
+					int typeChoice = sc.nextInt();
+					sc.nextLine();
+
+					System.out.println("Enter contact name:");
+					String name = sc.nextLine();
+
+					System.out.println("Enter contact number:");
+					String number = sc.nextLine();
+
+					System.out.println("Enter contact email:");
+					String email = sc.nextLine();
+
+					Contact contact;
+
+					if (typeChoice == 1) {
+						contact = new Person();
+					} else if (typeChoice == 2) {
+						contact = new Organization();
+					} else {
+						System.out.println("Invalid contact type.");
+						continue;
+					}
+
+					contact.setName(name);
+					contact.setNumber(number);
+					contact.setEmail(email);
+
+					Main.currentUser.addContact(contact);
+
+					System.out.println("Contact added successfully!");
+				}
+
+				// Close
+				else if (cChoice == contacts.size() + 2) {
+					break;
+				}
+
+				else {
+					System.out.println("Invalid choice.");
+				}
+			}
+		}
+
+		else if (choice == 3) {
+
+			Main.currentUser = null;
+			System.out.println("Logged out successfully.");
+		}
+	}
 }
