@@ -13,6 +13,9 @@ public abstract class Contact {
     public void addTag(String tag) {
         tags.add(tag);
     }
+    public List<String> getTags() {
+        return tags;
+    }
 	public String getName() {
 		return name;
 	}

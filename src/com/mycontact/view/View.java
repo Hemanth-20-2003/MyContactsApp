@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.mycontact.main.Main;
 import com.mycontact.user.model.User;
@@ -161,7 +163,8 @@ public class View {
 
 				System.out.println((contacts.size() + 1) + ". Add Contact");
 				System.out.println((contacts.size() + 2) + ". Bulk Operations");
-				System.out.println((contacts.size() + 3) + ". Close");
+				System.out.println((contacts.size() + 3) + ". Search");
+				System.out.println((contacts.size() + 4) + ". Close");
 
 				int cChoice = sc.nextInt();
 				sc.nextLine();
@@ -356,8 +359,95 @@ public class View {
 				    }
 				}
 				
-				// Close
+				//Search
 				else if (cChoice == contacts.size() + 3) {
+
+				    System.out.println("\nSearch By:");
+				    System.out.println("1. Name");
+				    System.out.println("2. Phone");
+				    System.out.println("3. Email");
+				    System.out.println("4. Tags");
+
+				    int searchChoice = sc.nextInt();
+				    sc.nextLine();
+
+				    System.out.println("Enter search keyword:");
+				    String keyword = sc.nextLine();
+
+				    Pattern pattern = Pattern.compile(keyword, Pattern.CASE_INSENSITIVE);
+
+				    boolean found = false;
+
+				    for (int i = 0; i < contacts.size(); i++) {
+
+				        Contact contact = contacts.get(i);
+				        Matcher matcher;
+
+				        switch (searchChoice) {
+
+				            case 1: // Name
+				                matcher = pattern.matcher(contact.getName());
+				                if (matcher.find()) {
+				                    System.out.println((i + 1) + ". " + contact.getName());
+				                    found = true;
+				                }
+				                break;
+
+				            case 2: // Phone
+				                matcher = pattern.matcher(contact.getNumber());
+				                if (matcher.find()) {
+				                    System.out.println((i + 1) + ". " + contact.getName());
+				                    found = true;
+				                }
+				                break;
+
+				            case 3: // Email
+				                matcher = pattern.matcher(contact.getEmail());
+				                if (matcher.find()) {
+				                    System.out.println((i + 1) + ". " + contact.getName());
+				                    found = true;
+				                }
+				                break;
+
+				            case 4: // Tags
+				                for (String tag : contact.getTags()) {
+				                    matcher = pattern.matcher(tag);
+				                    if (matcher.find()) {
+				                        System.out.println((i + 1) + ". " + contact.getName());
+				                        found = true;
+				                        break;
+				                    }
+				                }
+				                break;
+
+				            default:
+				                System.out.println("Invalid search option.");
+				                break;
+				        }
+				    }
+
+				    if (!found) {
+				        System.out.println("No matching contacts found.");
+				        continue;
+				    }
+
+				    System.out.println("\nEnter contact number to view details (0 to cancel):");
+				    int selectedIndex = sc.nextInt();
+				    sc.nextLine();
+
+				    if (selectedIndex > 0 && selectedIndex <= contacts.size()) {
+
+				        Contact selected = contacts.get(selectedIndex - 1);
+
+				        System.out.println("\n--- Contact Details ---");
+				        System.out.println("Name   : " + selected.getName());
+				        System.out.println("Number : " + selected.getNumber());
+				        System.out.println("Email  : " + selected.getEmail());
+				    }
+				}
+				
+				// Close
+				else if (cChoice == contacts.size() + 4) {
 					break;
 				}
 

@@ -9,10 +9,10 @@ import com.mycontact.auth.strategy.BasicAuth;
 import com.mycontact.view.View;
 
 /**
- * UC-08: Bulk Operations
- * The Bulk Operations feature allows a logged-in user to perform actions on multiple contacts at once.  
- * Users can select multiple contacts and choose to delete them, add a common tag, or export them (dummy operation).  
- * This feature improves efficiency by enabling batch processing instead of handling contacts individually.
+ * UC-09: Search Contacts
+ * The Search Contacts feature allows a user to search contacts by name, phone number, email, or tags using regular expressions.  
+ * After selecting a search category, the user enters a keyword (e.g., "ra"), and the system displays all matching contacts with their original index numbers.  
+ * The user can then select a specific contact by entering its displayed number to view detailed information.
  *
  * This class:
  * - Initializes the application
@@ -23,7 +23,7 @@ import com.mycontact.view.View;
  * The application runs continuously until manually terminated.
  *
  * @author Developer
- * @version 5.0
+ * @version 9.0
  */
 public class Main {
 
