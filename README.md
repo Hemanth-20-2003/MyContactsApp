@@ -1,5 +1,8 @@
 # MyContactsApp
 
+## UC-11: Create Tag
+The Create Tag feature allows a user to create custom tags (such as Family, Work, Friends) for organizing contacts. A dedicated `Tag` class is introduced with attributes like tag name and a list of associated contacts. Tags are stored under the user and can be reused while assigning them to contacts.
+
 ## UC-10: Apply Filters on Contacts
 The Apply Filters feature allows a user to filter contacts based on specific criteria such as tag, date added, or frequently contacted status. The `dateAdded` field is automatically assigned when a contact is created, while the frequently contacted option is currently a dummy flag. This feature helps users quickly narrow down and manage contacts efficiently using structured filtering options.
 

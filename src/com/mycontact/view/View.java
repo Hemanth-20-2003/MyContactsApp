@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.mycontact.main.Main;
+import com.mycontact.tag.model.Tag;
 import com.mycontact.user.model.User;
 import com.mycontact.user.service.UserService;
 import com.mycontact.auth.Authentication;
@@ -294,232 +295,302 @@ public class View {
 				//Bulk Operations
 				else if (cChoice == contacts.size() + 2) {
 
-				    List<Integer> selectedIndexes = new ArrayList<>();
+					List<Integer> selectedIndexes = new ArrayList<>();
 
-				    System.out.println("Enter contact numbers to select (0 to stop):");
+					System.out.println("Enter contact numbers to select (0 to stop):");
 
-				    while (true) {
-				        int index = sc.nextInt();
-				        sc.nextLine();
+					while (true) {
+						int index = sc.nextInt();
+						sc.nextLine();
 
-				        if (index == 0) break;
+						if (index == 0) break;
 
-				        if (index >= 1 && index <= contacts.size()) {
-				            selectedIndexes.add(index - 1);
-				            System.out.println("Added: " + contacts.get(index - 1).getName());
-				        } else {
-				            System.out.println("Invalid contact number.");
-				        }
-				    }
+						if (index >= 1 && index <= contacts.size()) {
+							selectedIndexes.add(index - 1);
+							System.out.println("Added: " + contacts.get(index - 1).getName());
+						} else {
+							System.out.println("Invalid contact number.");
+						}
+					}
 
-				    if (selectedIndexes.isEmpty()) {
-				        System.out.println("No contacts selected.");
-				        continue;
-				    }
+					if (selectedIndexes.isEmpty()) {
+						System.out.println("No contacts selected.");
+						continue;
+					}
 
-				    System.out.println("\nBulk Options:");
-				    System.out.println("1. Delete");
-				    System.out.println("2. Tag");
-				    System.out.println("3. Export");
+					System.out.println("\nBulk Options:");
+					System.out.println("1. Delete");
+					System.out.println("2. Tag");
+					System.out.println("3. Export");
 
-				    int bulkChoice = sc.nextInt();
-				    sc.nextLine();
+					int bulkChoice = sc.nextInt();
+					sc.nextLine();
 
-				    // DELETE
-				    if (bulkChoice == 1) {
+					// DELETE
+					if (bulkChoice == 1) {
 
-				        // Remove from highest index to lowest to avoid shifting issue
-				        Collections.sort(selectedIndexes, Collections.reverseOrder());
+						// Remove from highest index to lowest to avoid shifting issue
+						Collections.sort(selectedIndexes, Collections.reverseOrder());
 
-				        for (int i : selectedIndexes) {
-				            Main.currentUser.deleteContact(i);
-				        }
+						for (int i : selectedIndexes) {
+							Main.currentUser.deleteContact(i);
+						}
 
-				        System.out.println("Selected contacts deleted successfully!");
-				    }
+						System.out.println("Selected contacts deleted successfully!");
+					}
 
-				    // TAG
-				    else if (bulkChoice == 2) {
+					// TAG
+					else if (bulkChoice == 2) {
 
-				        System.out.println("Enter tag name:");
-				        String tag = sc.nextLine();
+						List<Tag> userTags = Main.currentUser.getTags();
 
-				        for (int i : selectedIndexes) {
-				            contacts.get(i).addTag(tag);
-				        }
+						// If no tags exist
+						if (userTags.isEmpty()) {
 
-				        System.out.println("Tag added to selected contacts!");
-				    }
+							System.out.println("No tags available.");
+							System.out.println("1. Add Tag");
+							System.out.println("2. Cancel");
 
-				    // EXPORT (Dummy)
-				    else if (bulkChoice == 3) {
-				        System.out.println("Exported");
-				    }
+							int option = sc.nextInt();
+							sc.nextLine();
 
-				    else {
-				        System.out.println("Invalid option.");
-				    }
+							if (option == 1) {
+
+								System.out.println("Enter new tag name:");
+								String tagName = sc.nextLine();
+
+								Tag newTag = new Tag(tagName);
+								Main.currentUser.addTag(newTag);
+
+								userTags = Main.currentUser.getTags(); // refresh list
+
+								System.out.println("Tag created successfully!");
+
+							} else {
+								return;
+							}
+						}
+
+						// Show available tags
+						System.out.println("\nSelect Tag:");
+
+						for (int i = 0; i < userTags.size(); i++) {
+							System.out.println((i + 1) + ". " + userTags.get(i).getName());
+						}
+
+						System.out.println((userTags.size() + 1) + ". Add New Tag");
+
+						int tagChoice = sc.nextInt();
+						sc.nextLine();
+
+						Tag selectedTag;
+
+						// If user chooses Add New Tag
+						if (tagChoice == userTags.size() + 1) {
+
+							System.out.println("Enter new tag name:");
+							String tagName = sc.nextLine();
+
+							selectedTag = new Tag(tagName);
+							Main.currentUser.addTag(selectedTag);
+
+							System.out.println("Tag created successfully!");
+
+						}
+						else if (tagChoice >= 1 && tagChoice <= userTags.size()) {
+
+							selectedTag = userTags.get(tagChoice - 1);
+						}
+						else {
+							System.out.println("Invalid selection.");
+							return;
+						}
+
+						// Assign tag to selected contacts
+						for (int i : selectedIndexes) {
+
+							Contact contact = contacts.get(i);
+
+							contact.addTag(selectedTag);
+							selectedTag.addContact(contact);
+						}
+
+						System.out.println("Tag added to selected contacts!");
+					}
+
+					// EXPORT (Dummy)
+					else if (bulkChoice == 3) {
+						System.out.println("Exported");
+					}
+
+					else {
+						System.out.println("Invalid option.");
+					}
 				}
-				
+
 				//Search
 				else if (cChoice == contacts.size() + 3) {
 
-				    System.out.println("\nSearch By:");
-				    System.out.println("1. Name");
-				    System.out.println("2. Phone");
-				    System.out.println("3. Email");
-				    System.out.println("4. Tags");
+					System.out.println("\nSearch By:");
+					System.out.println("1. Name");
+					System.out.println("2. Phone");
+					System.out.println("3. Email");
+					System.out.println("4. Tags");
 
-				    int searchChoice = sc.nextInt();
-				    sc.nextLine();
+					int searchChoice = sc.nextInt();
+					sc.nextLine();
 
-				    System.out.println("Enter search keyword:");
-				    String keyword = sc.nextLine();
+					System.out.println("Enter search keyword:");
+					String keyword = sc.nextLine();
 
-				    Pattern pattern = Pattern.compile(keyword, Pattern.CASE_INSENSITIVE);
+					Pattern pattern = Pattern.compile(keyword, Pattern.CASE_INSENSITIVE);
 
-				    boolean found = false;
+					boolean found = false;
 
-				    for (int i = 0; i < contacts.size(); i++) {
+					for (int i = 0; i < contacts.size(); i++) {
 
-				        Contact contact = contacts.get(i);
-				        Matcher matcher;
+						Contact contact = contacts.get(i);
+						Matcher matcher;
 
-				        switch (searchChoice) {
+						switch (searchChoice) {
 
-				            case 1: // Name
-				                matcher = pattern.matcher(contact.getName());
-				                if (matcher.find()) {
-				                    System.out.println((i + 1) + ". " + contact.getName());
-				                    found = true;
-				                }
-				                break;
+						case 1: // Name
+							matcher = pattern.matcher(contact.getName());
+							if (matcher.find()) {
+								System.out.println((i + 1) + ". " + contact.getName());
+								found = true;
+							}
+							break;
 
-				            case 2: // Phone
-				                matcher = pattern.matcher(contact.getNumber());
-				                if (matcher.find()) {
-				                    System.out.println((i + 1) + ". " + contact.getName());
-				                    found = true;
-				                }
-				                break;
+						case 2: // Phone
+							matcher = pattern.matcher(contact.getNumber());
+							if (matcher.find()) {
+								System.out.println((i + 1) + ". " + contact.getName());
+								found = true;
+							}
+							break;
 
-				            case 3: // Email
-				                matcher = pattern.matcher(contact.getEmail());
-				                if (matcher.find()) {
-				                    System.out.println((i + 1) + ". " + contact.getName());
-				                    found = true;
-				                }
-				                break;
+						case 3: // Email
+							matcher = pattern.matcher(contact.getEmail());
+							if (matcher.find()) {
+								System.out.println((i + 1) + ". " + contact.getName());
+								found = true;
+							}
+							break;
 
-				            case 4: // Tags
-				                for (String tag : contact.getTags()) {
-				                    matcher = pattern.matcher(tag);
-				                    if (matcher.find()) {
-				                        System.out.println((i + 1) + ". " + contact.getName());
-				                        found = true;
-				                        break;
-				                    }
-				                }
-				                break;
+						case 4: // Tags
 
-				            default:
-				                System.out.println("Invalid search option.");
-				                break;
-				        }
-				    }
+						    for (Tag tag : contact.getTags()) {
 
-				    if (!found) {
-				        System.out.println("No matching contacts found.");
-				        continue;
-				    }
+						        matcher = pattern.matcher(tag.getName());
 
-				    System.out.println("\nEnter contact number to view details (0 to cancel):");
-				    int selectedIndex = sc.nextInt();
-				    sc.nextLine();
+						        if (matcher.find()) {
+						            System.out.println((i + 1) + ". " + contact.getName());
+						            found = true;
+						            break;
+						        }
+						    }
 
-				    if (selectedIndex > 0 && selectedIndex <= contacts.size()) {
+							break;
 
-				        Contact selected = contacts.get(selectedIndex - 1);
+						default:
+							System.out.println("Invalid search option.");
+							break;
+						}
+					}
 
-				        System.out.println("\n--- Contact Details ---");
-				        System.out.println("Name   : " + selected.getName());
-				        System.out.println("Number : " + selected.getNumber());
-				        System.out.println("Email  : " + selected.getEmail());
-				    }
+					if (!found) {
+						System.out.println("No matching contacts found.");
+						continue;
+					}
+
+					System.out.println("\nEnter contact number to view details (0 to cancel):");
+					int selectedIndex = sc.nextInt();
+					sc.nextLine();
+
+					if (selectedIndex > 0 && selectedIndex <= contacts.size()) {
+
+						Contact selected = contacts.get(selectedIndex - 1);
+
+						System.out.println("\n--- Contact Details ---");
+						System.out.println("Name   : " + selected.getName());
+						System.out.println("Number : " + selected.getNumber());
+						System.out.println("Email  : " + selected.getEmail());
+					}
 				}
-				
-				else if (cChoice == contacts.size() + 1) {
 
-				    System.out.println("\nFilter By:");
-				    System.out.println("1. Tag");
-				    System.out.println("2. Date Added (After)");
-				    System.out.println("3. Frequently Contacted");
+				else if (cChoice == contacts.size() + 4) {
 
-				    int filterChoice = sc.nextInt();
-				    sc.nextLine();
+					System.out.println("\nFilter By:");
+					System.out.println("1. Tag");
+					System.out.println("2. Date Added (After)");
+					System.out.println("3. Frequently Contacted");
 
-				    List<Contact> filtered = new ArrayList<>();
+					int filterChoice = sc.nextInt();
+					sc.nextLine();
 
-				    // FILTER BY TAG
-				    if (filterChoice == 1) {
+					List<Contact> filtered = new ArrayList<>();
 
-				        System.out.println("Enter tag:");
-				        String tagInput = sc.nextLine();
+					// FILTER BY TAG
+					if (filterChoice == 1) {
 
-				        for (Contact c : contacts) {
-				            if (c.getTags().contains(tagInput)) {
-				                filtered.add(c);
-				            }
-				        }
-				    }
+						System.out.println("Enter tag:");
+						String tagInput = sc.nextLine();
 
-				    // FILTER BY DATE
-				    else if (filterChoice == 2) {
+						for (Contact c : contacts) {
+							if (c.getTags().contains(tagInput)) {
+								filtered.add(c);
+							}
+						}
+					}
 
-				        System.out.println("Enter date (yyyy-MM-dd):");
-				        String dateInput = sc.nextLine();
+					// FILTER BY DATE
+					else if (filterChoice == 2) {
 
-				        try {
-				            LocalDate inputDate = LocalDate.parse(dateInput);
+						System.out.println("Enter date (yyyy-MM-dd):");
+						String dateInput = sc.nextLine();
 
-				            for (Contact c : contacts) {
-				                if (c.getDateAdded().toLocalDate().isAfter(inputDate)) {
-				                    filtered.add(c);
-				                }
-				            }
-				        } catch (Exception e) {
-				            System.out.println("Invalid date format.");
-				            continue;
-				        }
-				    }
+						try {
+							LocalDate inputDate = LocalDate.parse(dateInput);
 
-				    // FILTER BY FREQUENTLY CONTACTED (Dummy)
-				    else if (filterChoice == 3) {
+							for (Contact c : contacts) {
+								if (c.getDateAdded().toLocalDate().isAfter(inputDate)) {
+									filtered.add(c);
+								}
+							}
+						} catch (Exception e) {
+							System.out.println("Invalid date format.");
+							continue;
+						}
+					}
 
-				        for (Contact c : contacts) {
-				            if (c.isFrequentlyContacted()) {
-				                filtered.add(c);
-				            }
-				        }
-				    }
+					// FILTER BY FREQUENTLY CONTACTED (Dummy)
+					else if (filterChoice == 3) {
 
-				    else {
-				        System.out.println("Invalid filter option.");
-				        continue;
-				    }
+						for (Contact c : contacts) {
+							if (c.isFrequentlyContacted()) {
+								filtered.add(c);
+							}
+						}
+					}
 
-				    // Display Results
-				    if (filtered.isEmpty()) {
-				        System.out.println("No contacts found.");
-				    } else {
-				        System.out.println("\nFiltered Contacts:");
-				        for (Contact c : filtered) {
-				            int index = contacts.indexOf(c);
-				            System.out.println((index + 1) + ". " + c.getName());
-				        }
-				    }
+					else {
+						System.out.println("Invalid filter option.");
+						continue;
+					}
+
+					// Display Results
+					if (filtered.isEmpty()) {
+						System.out.println("No contacts found.");
+					} else {
+						System.out.println("\nFiltered Contacts:");
+						for (Contact c : filtered) {
+							int index = contacts.indexOf(c);
+							System.out.println((index + 1) + ". " + c.getName());
+						}
+					}
 				}
-				
+
 				// Close
 				else if (cChoice == contacts.size() + 5) {
 					break;
