@@ -29,3 +29,7 @@ The contact is safely removed from the user's contact collection, ensuring data 
 The Edit Contact feature allows users to update existing contact details.  
 Users can modify the name, number, or email of a selected contact.  
 Changes are applied instantly while maintaining proper encapsulation.
+## UC-01 to UC-05: User and Contact Management
+The system allows a new user to register by providing email, password, and profile information (UC-01) and enables registered users to securely log in using valid credentials (UC-02). 
+Once authenticated, the logged-in user can manage their profile information, including updating details or changing their password (UC-03). 
+The user can also create new contacts by adding name, phone number, email, and optional fields (UC-04), and view complete details of any specific contact stored in their contact list (UC-05).
