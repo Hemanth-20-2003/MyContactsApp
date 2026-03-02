@@ -9,10 +9,10 @@ import com.mycontact.auth.strategy.BasicAuth;
 import com.mycontact.view.View;
 
 /**
- * UC-11: Create Tag
- * The Create Tag feature allows a user to create custom tags (such as Family, Work, Friends) for organizing contacts. 
- * A dedicated `Tag` class is introduced with attributes like tag name and a list of associated contacts. Tags are stored under the user and can be reused while assigning them to contacts.
- * 
+ * ## UC-12: Apply Tags to Contacts
+ * The Apply Tags feature allows a user to assign one or multiple existing tags to contacts. 
+* The relationship between `Contact` and `Tag` is maintained using object references to ensure proper two-way mapping. 
+ * This enables structured categorization and efficient filtering of contacts.
  * This class:
  * - Initializes the application
  * - Maintains the in-memory user database
